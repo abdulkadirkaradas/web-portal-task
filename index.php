@@ -7,6 +7,10 @@
 </head>
 <body>
     <div class="display-container">
+        <div class="search">
+            <div class="unselect modal-button" id="modal">Open Modal</div>
+            <input type="text" id="searchbar" onkeyup="search()">
+        </div>
         <div class="header">
             <div class="class section title">Task</div>
             <div class="class section title">Title</div>
@@ -31,7 +35,6 @@
                 },
                 success: function(response) {
                     let res = $.parseJSON(response);
-                    console.log(res);
                     body.empty();
                     $.each(res, function(key, value) {
                         body.append(
@@ -48,6 +51,28 @@
             });
         })()
     });
+
+    function search() {
+        var input, filter, row, td, cell, value;
+        input = $("#searchbar");
+        filter = input.val().toUpperCase();
+        row = $(".row");
+
+        for (let i = 0; i < row.length; i++) {
+            row[i].style.display = "none";
+
+            td = row[i].getElementsByClassName("cell");
+            for (let j = 0; j < td.length; j++) {
+                cell = row[i].getElementsByClassName("cell")[j];
+                if(cell) {
+                    if(cell.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        row[i].style.display = "flex";
+                        break;
+                    }
+                }
+            }
+        }
+    }
 </script>
 
 <style>
@@ -58,6 +83,33 @@
     .display-container {
         height: 100%;
         padding: 10px;
+    }
+
+    .display-container .modal-button {
+        display: inline-block;
+	    font-weight: 400;
+	    color: #6c757d;
+	    text-align: center;
+	    border: 1px solid #6c757d;
+	    padding: 0px 10px;
+	    font-size: 1rem;
+	    line-height: 1.5;
+	    border-radius: .25rem;
+	    color: #6c757d;
+    	background-color: #ffffff;
+
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+    .display-container .search {
+        width: 100%;
+    }
+
+    .display-container .search input {
+        float: right;
+        margin-bottom: 5px;
+        outline: none;
     }
 
     .display-container .header {
