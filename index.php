@@ -18,8 +18,36 @@
 </body>
 </html>
 
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script>
-
+    $(document).ready(function() {
+        (function getRecords() {
+            let body = $(".body");
+            $.ajax({
+                type: "POST",
+                url: "handleRequest.php",
+                data: {
+                    url: "https://api.baubuddy.de/dev/index.php/v1/tasks/select"
+                },
+                success: function(response) {
+                    let res = $.parseJSON(response);
+                    console.log(res);
+                    body.empty();
+                    $.each(res, function(key, value) {
+                        body.append(
+                            `<div class="row">
+                                <div class="cell section title">` + value.task + `</div>
+                                <div class="cell section title">` + value.title + `</div>
+                                <div class="cell section title">` + value.description + `</div>
+                                <div class="cell section title" style="background-color: ` + value.colorCode + `"></div>
+                            </div>`
+                        );
+                        setTimeout(getRecords, 60 * (60 * 1000));
+                    });
+                }
+            });
+        })()
+    });
 </script>
 
 <style>
@@ -57,5 +85,19 @@
         border: 1px solid black;
     }
 
+    .display-container .body .row {
+        display: flex;
+        margin-bottom: 5px;
+    }
 
+    .display-container .body .section {
+        width: calc(100% / 4);
+        padding: 5px;
+        display: flex;
+        text-align: center;
+        border-left: 1px solid black;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        font-size: 15px;
+    }
 </style>
