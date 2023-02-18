@@ -19,6 +19,24 @@
         </div>
         <div class="body"></div>
     </div>
+    <div class="overlay" id="overlay">
+        <div class="overlay-container">
+            <div class="overlay-body">
+                <div class="image" id="image">
+                    <div class="preview">
+                        <img id="image-preview">
+                    </div>
+                    <div class="uploader unselect">
+                        <label for="file-uploader">Upload</label>
+                        <input type="file" id="file-uploader" accept="image/*" hidden>
+                    </div>
+                    <div class="close unselect">
+                        <div class="close" id="close-btn">Close</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 
@@ -50,6 +68,31 @@
                 }
             });
         })()
+
+        $("#modal").on("click", function() {
+            let overlay = document.getElementById("overlay");
+            overlay.style.display = "block";
+        });
+
+        $("#file-uploader").on("change", function() {
+            var files = $("#file-uploader")[0].files;
+            if(files.length > 0) {
+                let image = $("#image");
+
+                let src = URL.createObjectURL(files[0]);
+                let preview = $("#image-preview");
+
+                $("#image-preview").css("display", "block");
+                $("#image-preview").attr("src", src);
+            }
+        });
+
+        $("#close-btn").on("click", function() {
+            $("#image-preview").css("display", "none");
+            $("#image-preview").attr("src", null);
+            let overlay = document.getElementById("overlay");
+            overlay.style.display = "none";
+        });
     });
 
     function search() {
@@ -151,5 +194,74 @@
         border-top: 1px solid black;
         border-bottom: 1px solid black;
         font-size: 15px;
+    }
+
+    .overlay {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        display: none;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2;
+    }
+
+    .overlay .overlay-container {
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .overlay .overlay-container .overlay-body {
+        width: 50%;
+        height: 60%;
+        background-color: white;
+    }
+
+    .overlay .overlay-container .overlay-body .image {
+        width: 100%;
+        height: 100%;
+    }
+
+    .overlay .overlay-container .overlay-body .image .preview {
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        padding: 5px;
+    }
+
+    .overlay .overlay-container .overlay-body .image .preview img {
+        display: none;
+        width: 90%;
+    }
+
+    .overlay .overlay-container .overlay-body .image .uploader, .overlay .overlay-container .overlay-body .image .close {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .overlay .overlay-container .overlay-body .image .uploader label, .overlay .overlay-container .overlay-body .image .close .close {
+        display: block;
+        background-color: indigo;
+        color: white;
+        padding: 0.5rem;
+        font-family: sans-serif;
+        border-radius: 0.3rem;
+        margin: 10px auto;
+        cursor: pointer;
+    }
+
+    .unselect {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 </style>
